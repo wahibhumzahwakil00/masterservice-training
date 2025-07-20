@@ -131,6 +131,40 @@
             background-color: rgba(0, 123, 255, 0.1); /* Subtle background highlight */
         }
 
+        /* Hamburger Icon Styles */
+        .hamburger {
+            display: none; /* Hidden by default, shown on mobile */
+            flex-direction: column;
+            justify-content: space-around;
+            width: 30px;
+            height: 25px;
+            cursor: pointer;
+            z-index: 1001; /* Above navbar links */
+            padding: 5px;
+        }
+
+        .hamburger .bar {
+            width: 100%;
+            height: 3px;
+            background-color: #f8f9fa;
+            border-radius: 10px;
+            transition: all 0.3s ease-in-out;
+        }
+
+        /* Animation for hamburger to 'X' */
+        .hamburger.active .bar:nth-child(1) {
+            transform: translateY(11px) rotate(45deg);
+        }
+
+        .hamburger.active .bar:nth-child(2) {
+            opacity: 0;
+        }
+
+        .hamburger.active .bar:nth-child(3) {
+            transform: translateY(-11px) rotate(-45deg);
+        }
+
+
         /* Top Toggle Buttons Styles */
         .toggle-btn-container {
             text-align: center;
@@ -1279,23 +1313,45 @@
 
             /* Main Navbar Responsive */
             #main-navbar {
-                flex-direction: column;
+                flex-direction: row; /* Keep logo and burger on one line */
+                justify-content: space-between;
                 padding: 15px 20px;
                 border-radius: 0; /* Remove border-radius on small screens */
             }
             #main-navbar .logo {
-                margin-bottom: 15px;
+                margin-bottom: 0; /* Reset margin */
             }
             #main-navbar .nav-links {
+                display: none; /* Hide by default on mobile */
                 flex-direction: column;
                 gap: 10px;
                 width: 100%;
                 text-align: center;
+                position: absolute; /* Position menu over content */
+                top: 60px; /* Below navbar */
+                left: 0;
+                background-color: #212529; /* Same as navbar for continuity */
+                box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+                padding: 20px 0;
+                border-bottom-left-radius: 12px;
+                border-bottom-right-radius: 12px;
+                transition: transform 0.3s ease-out;
+                transform: translateY(-100%); /* Start off-screen */
             }
+
+            #main-navbar .nav-links.active {
+                display: flex; /* Show when active */
+                transform: translateY(0); /* Slide in */
+            }
+
             #main-navbar .nav-links a {
-                padding: 8px 10px;
+                padding: 12px 10px;
                 width: calc(100% - 20px); /* Adjust for padding */
                 display: block;
+            }
+
+            .hamburger {
+                display: flex; /* Show hamburger on mobile */
             }
 
             /* Top Toggle Buttons Responsive */
@@ -1468,7 +1524,12 @@
     <!-- Main Navigation Bar -->
     <nav id="main-navbar">
         <a href="#" class="logo">YourBrand</a>
-        <ul class="nav-links">
+        <div class="hamburger" id="hamburger-menu">
+            <div class="bar"></div>
+            <div class="bar"></div>
+            <div class="bar"></div>
+        </div>
+        <ul class="nav-links" id="nav-links-menu">
             <li><a href="#">Home</a></li>
             <li><a href="#">About</a></li>
             <li><a href="#">Services</a></li>
@@ -1938,6 +1999,8 @@
         document.addEventListener('DOMContentLoaded', () => {
             const sectionGroups = document.querySelectorAll('.section-group');
             const toggleButtons = document.querySelectorAll('.toggle-btn');
+            const hamburger = document.getElementById('hamburger-menu');
+            const navLinksMenu = document.getElementById('nav-links-menu');
 
             // Function to hide all section groups
             function hideAllSectionGroups() {
@@ -1967,11 +2030,16 @@
                 }
             }
 
-            // Event listeners for toggle buttons
+            // Event listeners for top toggle buttons
             toggleButtons.forEach(button => {
                 button.addEventListener('click', () => {
                     const sectionType = button.dataset.sectionType;
                     showSectionGroup(sectionType);
+                    // Close mobile menu if open when a section button is clicked
+                    if (navLinksMenu.classList.contains('active')) {
+                        navLinksMenu.classList.remove('active');
+                        hamburger.classList.remove('active');
+                    }
                 });
             });
 
@@ -2033,6 +2101,22 @@
                 header.addEventListener('click', () => {
                     const item = header.closest('.accordion-item');
                     item.classList.toggle('active');
+                });
+            });
+
+            // Hamburger menu toggle functionality
+            hamburger.addEventListener('click', () => {
+                navLinksMenu.classList.toggle('active');
+                hamburger.classList.toggle('active');
+            });
+
+            // Close menu when a navigation link is clicked (for mobile)
+            navLinksMenu.querySelectorAll('a').forEach(link => {
+                link.addEventListener('click', () => {
+                    if (navLinksMenu.classList.contains('active')) {
+                        navLinksMenu.classList.remove('active');
+                        hamburger.classList.remove('active');
+                    }
                 });
             });
         });
