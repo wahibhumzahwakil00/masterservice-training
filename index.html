@@ -1,0 +1,2041 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Client Template Showcase</title>
+    <!-- Font Awesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <style>
+        /* Basic Reset & Body Styles */
+        body {
+            font-family: 'Inter', sans-serif; /* Using Inter as per instructions */
+            margin: 0;
+            padding: 0; /* Removed padding here to allow full-width navbar */
+            background-color: #f4f4f4;
+            color: #333;
+            line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        /* Tailwind CSS CDN (for general utility, though custom CSS is used heavily here) */
+        /* This is included for completeness, but the styling is primarily custom CSS */
+        /* <script src="https://cdn.tailwindcss.com"></script> */
+
+
+        .section-container {
+            background-color: #fff;
+            border-radius: 12px; /* Rounded corners */
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            margin: 40px 20px; /* Added horizontal margin */
+            padding: 30px;
+            transition: all 0.3s ease-in-out;
+            border: 1px solid #e0e0e0;
+        }
+
+        .section-container h2 {
+            text-align: center;
+            color: #0056b3;
+            margin-bottom: 30px;
+            border-bottom: 2px solid #e0e0e0;
+            padding-bottom: 15px;
+            font-size: 2.2em;
+            font-weight: 700;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        /* Global Button Styles */
+        .btn {
+            display: inline-block;
+            padding: 12px 25px;
+            text-decoration: none;
+            border-radius: 8px; /* Rounded corners */
+            font-weight: 600;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            border: none; /* Ensure no default button border */
+            cursor: pointer;
+        }
+
+        .btn:hover {
+            transform: translateY(-3px) scale(1.02); /* Enhanced hover effect */
+            box-shadow: 0 6px 15px rgba(0,0,0,0.25);
+        }
+
+        /* Main Navigation Bar Styles */
+        #main-navbar {
+            background-color: #212529; /* Dark background */
+            padding: 15px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            position: sticky;
+            top: 0;
+            z-index: 1000; /* Ensure it stays on top */
+            border-bottom-left-radius: 12px;
+            border-bottom-right-radius: 12px;
+        }
+
+        #main-navbar .logo {
+            font-size: 1.8em;
+            font-weight: 800;
+            color: #007bff;
+            text-decoration: none;
+            letter-spacing: 0.5px;
+        }
+
+        #main-navbar .nav-links {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            gap: 30px;
+        }
+
+        #main-navbar .nav-links a {
+            color: #f8f9fa;
+            text-decoration: none;
+            padding: 10px 15px;
+            border-radius: 6px;
+            transition: background-color 0.3s ease, color 0.3s ease, transform 0.2s ease;
+            font-weight: 500;
+            position: relative;
+            overflow: hidden;
+        }
+
+        #main-navbar .nav-links a::before {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background-color: #007bff;
+            transform: scaleX(0);
+            transform-origin: bottom right;
+            transition: transform 0.3s ease-out;
+        }
+
+        #main-navbar .nav-links a:hover::before {
+            transform: scaleX(1);
+            transform-origin: bottom left;
+        }
+
+        #main-navbar .nav-links a:hover {
+            color: #007bff; /* Change text color on hover */
+            background-color: rgba(0, 123, 255, 0.1); /* Subtle background highlight */
+        }
+
+        /* Top Toggle Buttons Styles */
+        .toggle-btn-container {
+            text-align: center;
+            margin: 30px 20px;
+            padding: 20px;
+            background-color: #f0f0f0;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 15px;
+        }
+
+        .toggle-btn {
+            background-color: #4a90e2; /* A pleasant blue */
+            color: #fff;
+            padding: 10px 20px;
+            border-radius: 6px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.2s ease;
+            border: none;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        .toggle-btn:hover {
+            background-color: #357ABD;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+        }
+
+        /* Next/Previous Style Buttons (within sections) */
+        .nav-style-btn-container {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px dashed #e0e0e0;
+        }
+
+        .nav-style-btn {
+            padding: 10px 20px;
+            border-radius: 6px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.2s ease;
+            border: none;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        .nav-style-btn.prev {
+            background-color: #6c757d;
+            color: #fff;
+        }
+        .nav-style-btn.prev:hover {
+            background-color: #5a6268;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+        }
+
+        .nav-style-btn.next {
+            background-color: #007bff;
+            color: #fff;
+        }
+        .nav-style-btn.next:hover {
+            background-color: #0056b3;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+        }
+
+
+        /* --- Hero Section Styles --- */
+
+        /* Hero Section Style 1: Minimalist */
+        .hero-style1 {
+            text-align: center;
+            padding: 80px 20px;
+            background: linear-gradient(135deg, #e0f2f7 0%, #c1e4ed 100%);
+            border-radius: 12px;
+            overflow: hidden; /* For potential background elements */
+            position: relative;
+        }
+
+        .hero-style1 h1 {
+            font-size: 3.8em;
+            color: #007bff;
+            margin-bottom: 15px;
+            font-weight: 800;
+            letter-spacing: -1px;
+        }
+
+        .hero-style1 p {
+            font-size: 1.3em;
+            color: #555;
+            max-width: 700px;
+            margin: 0 auto 40px auto;
+            line-height: 1.5;
+        }
+
+        .hero-style1 .btn {
+            background-color: #007bff;
+            color: #fff;
+        }
+
+        /* Hero Section Style 2: Image Background */
+        .hero-style2 {
+            background: url('https://placehold.co/1500x500/007bff/ffffff?text=Inspiring+Background') no-repeat center center/cover;
+            color: #fff;
+            text-align: center;
+            padding: 100px 20px;
+            position: relative;
+            border-radius: 12px;
+            overflow: hidden;
+        }
+
+        .hero-style2 .hero-overlay {
+            background-color: rgba(0, 0, 0, 0.65); /* Darker overlay for better text contrast */
+            padding: 50px;
+            border-radius: 10px;
+            display: inline-block;
+            backdrop-filter: blur(3px); /* Subtle blur effect */
+        }
+
+        .hero-style2 h1 {
+            font-size: 4.5em;
+            margin-bottom: 20px;
+            text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.7);
+            font-weight: 900;
+        }
+
+        .hero-style2 p {
+            font-size: 1.6em;
+            margin-bottom: 40px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.6);
+            line-height: 1.4;
+        }
+
+        .hero-style2 .btn-alt {
+            background-color: #28a745;
+            color: #fff;
+            padding: 15px 35px;
+            font-size: 1.2em;
+        }
+
+        /* Hero Section Style 3: Centered Content with Gradient Button */
+        .hero-style3 {
+            text-align: center;
+            padding: 100px 20px;
+            background: linear-gradient(to right, #6a11cb 0%, #2575fc 100%);
+            color: #fff;
+            border-radius: 12px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero-style3::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0) 70%);
+            transform: rotate(45deg);
+            opacity: 0.3;
+        }
+
+        .hero-style3 h1 {
+            font-size: 4.2em;
+            margin-bottom: 20px;
+            font-weight: 900;
+            text-shadow: 2px 2px 5px rgba(0,0,0,0.3);
+        }
+
+        .hero-style3 p {
+            font-size: 1.4em;
+            max-width: 800px;
+            margin: 0 auto 40px auto;
+            line-height: 1.5;
+        }
+
+        .hero-style3 .btn {
+            background: linear-gradient(45deg, #ffc107 0%, #ff8c00 100%);
+            color: #333;
+            font-size: 1.1em;
+            padding: 14px 30px;
+            border: none;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+        }
+
+        .hero-style3 .btn:hover {
+            background: linear-gradient(45deg, #ff8c00 0%, #ffc107 100%);
+            transform: translateY(-4px) scale(1.03); /* Enhanced hover */
+            box-shadow: 0 8px 20px rgba(0,0,0,0.4);
+        }
+
+
+        /* --- About Us Section Styles --- */
+
+        /* About Us Style 1: Simple Text Block */
+        .about-style1 {
+            padding: 30px;
+            text-align: center;
+            background-color: #fcfcfc;
+        }
+
+        .about-style1 h3 {
+            font-size: 2.8em;
+            color: #343a40;
+            margin-bottom: 20px;
+            font-weight: 700;
+        }
+
+        .about-style1 p {
+            font-size: 1.15em;
+            max-width: 800px;
+            margin: 0 auto;
+            color: #666;
+            line-height: 1.7;
+        }
+
+        /* About Us Style 2: Image & Text Split */
+        .about-style2 {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 40px;
+            padding: 40px;
+            background-color: #fcfcfc;
+        }
+
+        .about-style2 .about-image {
+            flex: 1;
+            min-width: 320px;
+        }
+
+        .about-style2 .about-image img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 12px; /* Rounded corners */
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15);
+        }
+
+        .about-style2 .about-content {
+            flex: 2;
+            min-width: 320px;
+        }
+
+        .about-style2 h3 {
+            font-size: 2.5em;
+            color: #007bff;
+            margin-bottom: 20px;
+            font-weight: 700;
+        }
+
+        .about-style2 p {
+            margin-bottom: 20px;
+            font-size: 1.05em;
+            color: #555;
+        }
+
+        .about-style2 ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .about-style2 ul li {
+            margin-bottom: 12px;
+            position: relative;
+            padding-left: 35px;
+            font-size: 1.1em;
+            color: #444;
+        }
+
+        .about-style2 ul li::before {
+            content: '\f00c'; /* Font Awesome check-circle icon */
+            font-family: 'Font Awesome 5 Free';
+            font-weight: 900;
+            color: #28a745;
+            position: absolute;
+            left: 0;
+            top: 0;
+            font-size: 1.2em;
+        }
+
+        /* About Us Style 3: Icon Box Grid */
+        .about-style3 {
+            padding: 40px;
+            text-align: center;
+            background-color: #fcfcfc;
+        }
+
+        .about-style3 h3 {
+            font-size: 2.8em;
+            color: #343a40;
+            margin-bottom: 40px;
+            font-weight: 700;
+        }
+
+        .about-style3 .icon-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 30px;
+        }
+
+        .about-style3 .icon-box {
+            background-color: #f0f8ff;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .about-style3 .icon-box:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+        }
+
+        .about-style3 .icon-box .icon {
+            font-size: 3.5em;
+            color: #007bff;
+            margin-bottom: 20px;
+        }
+
+        .about-style3 .icon-box h4 {
+            font-size: 1.8em;
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        .about-style3 .icon-box p {
+            font-size: 0.95em;
+            color: #666;
+        }
+
+
+        /* --- Services Section Styles --- */
+
+        /* Services Style 1: Grid Cards */
+        .services-style1 {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 30px;
+            padding: 40px;
+            background-color: #fcfcfc;
+        }
+
+        .services-style1 .service-card {
+            background-color: #f8f9fa;
+            border: 1px solid #e9ecef;
+            border-radius: 12px;
+            padding: 30px;
+            text-align: center;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .services-style1 .service-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+        }
+
+        .services-style1 .service-card h4 {
+            color: #007bff;
+            font-size: 1.8em;
+            margin-bottom: 15px;
+            font-weight: 600;
+        }
+
+        .services-style1 .service-card p {
+            font-size: 1.0em;
+            color: #666;
+            line-height: 1.6;
+        }
+
+        /* Services Style 2: List with Icons */
+        .services-style2 {
+            padding: 40px;
+            background-color: #fcfcfc;
+        }
+
+        .services-style2 .service-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 25px;
+            margin-bottom: 30px;
+            padding-bottom: 25px;
+            border-bottom: 1px dashed #e0e0e0;
+        }
+
+        .services-style2 .service-item:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+
+        .services-style2 .service-item .icon {
+            font-size: 3em;
+            color: #007bff;
+            min-width: 60px;
+            text-align: center;
+            line-height: 1;
+        }
+
+        .services-style2 .service-item div {
+            flex-grow: 1;
+        }
+
+        .services-style2 .service-item h4 {
+            margin-top: 0;
+            font-size: 1.6em;
+            color: #343a40;
+            margin-bottom: 8px;
+        }
+
+        .services-style2 .service-item p {
+            font-size: 1.0em;
+            color: #555;
+            line-height: 1.6;
+        }
+
+        /* Services Style 3: Image Left/Right with Text */
+        .services-style3 {
+            padding: 40px;
+            background-color: #fcfcfc;
+        }
+
+        .services-style3 .service-block {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 40px;
+            margin-bottom: 50px;
+        }
+
+        .services-style3 .service-block:nth-child(even) {
+            flex-direction: row-reverse; /* Image on right for even blocks */
+        }
+
+        .services-style3 .service-block .service-image {
+            flex: 1;
+            min-width: 300px;
+        }
+
+        .services-style3 .service-block .service-image img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 12px;
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15);
+        }
+
+        .services-style3 .service-block .service-content {
+            flex: 2;
+            min-width: 300px;
+        }
+
+        .services-style3 .service-block h4 {
+            font-size: 2.2em;
+            color: #007bff;
+            margin-bottom: 15px;
+            font-weight: 700;
+        }
+
+        .services-style3 .service-block p {
+            font-size: 1.05em;
+            color: #555;
+            line-height: 1.7;
+        }
+
+        /* Services Style 4: Accordion/Expandable List */
+        .services-style4 {
+            padding: 40px;
+            background-color: #fcfcfc;
+        }
+
+        .services-style4 .accordion-item {
+            background-color: #f8f8f8;
+            border: 1px solid #eee;
+            border-radius: 10px;
+            margin-bottom: 15px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+        }
+
+        .services-style4 .accordion-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px;
+            cursor: pointer;
+            background-color: #e9f5ff;
+            color: #007bff;
+            font-size: 1.3em;
+            font-weight: 600;
+            border-bottom: 1px solid #d0eaff;
+            transition: background-color 0.3s ease;
+        }
+
+        .services-style4 .accordion-header:hover {
+            background-color: #d0eaff;
+        }
+
+        .services-style4 .accordion-header .icon {
+            font-size: 0.8em;
+            transition: transform 0.3s ease;
+        }
+
+        .services-style4 .accordion-content {
+            padding: 0 20px;
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.5s ease-out, padding 0.5s ease-out;
+            background-color: #fff;
+            color: #555;
+            line-height: 1.6;
+        }
+
+        .services-style4 .accordion-item.active .accordion-content {
+            max-height: 200px; /* Adjust as needed */
+            padding: 20px;
+        }
+
+        .services-style4 .accordion-item.active .accordion-header .icon {
+            transform: rotate(180deg);
+        }
+
+
+        /* --- Why Us Section Styles --- */
+
+        /* Why Us Style 1: Bullet Points */
+        .why-us-style1 {
+            padding: 40px;
+            text-align: center;
+            background-color: #fcfcfc;
+        }
+
+        .why-us-style1 h3 {
+            font-size: 2.8em;
+            color: #0056b3;
+            margin-bottom: 30px;
+            font-weight: 700;
+        }
+
+        .why-us-style1 ul {
+            list-style: none;
+            padding: 0;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        .why-us-style1 ul li {
+            background-color: #f8f9fa;
+            margin-bottom: 15px;
+            padding: 20px 25px;
+            border-left: 6px solid #007bff;
+            border-radius: 10px;
+            text-align: left;
+            font-size: 1.15em;
+            color: #444;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+            transition: transform 0.2s ease;
+        }
+
+        .why-us-style1 ul li:hover {
+            transform: translateX(5px);
+        }
+
+        .why-us-style1 ul li strong {
+            color: #007bff;
+        }
+
+        /* Why Us Style 2: Feature Blocks */
+        .why-us-style2 {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            padding: 40px;
+            background-color: #fcfcfc;
+        }
+
+        .why-us-style2 .feature-block {
+            text-align: center;
+            padding: 35px;
+            background: linear-gradient(135deg, #f0f8ff 0%, #e0f2ff 100%);
+            border-radius: 12px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .why-us-style2 .feature-block:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+        }
+
+        .why-us-style2 .feature-block .icon {
+            font-size: 3.8em;
+            color: #28a745;
+            margin-bottom: 20px;
+        }
+
+        .why-us-style2 .feature-block h4 {
+            font-size: 1.8em;
+            color: #343a40;
+            margin-bottom: 10px;
+            font-weight: 600;
+        }
+
+        .why-us-style2 .feature-block p {
+            font-size: 1.0em;
+            color: #666;
+            line-height: 1.6;
+        }
+
+        /* Why Us Style 3: Numbered Points */
+        .why-us-style3 {
+            padding: 40px;
+            background-color: #fcfcfc;
+        }
+
+        .why-us-style3 h3 {
+            text-align: center;
+            font-size: 2.8em;
+            color: #343a40;
+            margin-bottom: 40px;
+            font-weight: 700;
+        }
+
+        .why-us-style3 .numbered-list {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 25px;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .why-us-style3 .numbered-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 20px;
+            background-color: #fff;
+            padding: 25px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            border-left: 5px solid #ffc107;
+        }
+
+        .why-us-style3 .numbered-item .number {
+            font-size: 2.5em;
+            font-weight: 700;
+            color: #ffc107;
+            line-height: 1;
+            flex-shrink: 0;
+        }
+
+        .why-us-style3 .numbered-item h4 {
+            font-size: 1.6em;
+            color: #333;
+            margin-top: 0;
+            margin-bottom: 8px;
+        }
+
+        .why-us-style3 .numbered-item p {
+            font-size: 1.0em;
+            color: #666;
+            line-height: 1.6;
+        }
+
+        /* Why Us Style 4: Testimonial Carousel (simplified static for demo) */
+        .why-us-style4 {
+            padding: 40px;
+            background-color: #fcfcfc;
+            text-align: center;
+        }
+
+        .why-us-style4 h3 {
+            font-size: 2.8em;
+            color: #343a40;
+            margin-bottom: 40px;
+            font-weight: 700;
+        }
+
+        .why-us-style4 .testimonial-card {
+            background-color: #e6ffe6; /* Light green background */
+            padding: 35px;
+            border-radius: 12px;
+            max-width: 700px;
+            margin: 0 auto;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            border: 1px solid #d4edda;
+        }
+
+        .why-us-style4 .testimonial-card p {
+            font-size: 1.2em;
+            font-style: italic;
+            color: #444;
+            margin-bottom: 20px;
+            line-height: 1.8;
+        }
+
+        .why-us-style4 .testimonial-card .author {
+            font-weight: 600;
+            color: #28a745;
+            font-size: 1.1em;
+            margin-top: 10px;
+        }
+
+        /* --- Trainings Section Styles --- */
+
+        /* Trainings Style 1: Course Cards */
+        .trainings-style1 {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            padding: 40px;
+            background-color: #fcfcfc;
+        }
+
+        .trainings-style1 .course-card {
+            background-color: #fff;
+            border: 1px solid #ddd;
+            border-radius: 12px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+            padding: 25px;
+            text-align: center;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .trainings-style1 .course-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .trainings-style1 .course-card h4 {
+            color: #dc3545;
+            font-size: 1.8em;
+            margin-bottom: 15px;
+            font-weight: 700;
+        }
+
+        .trainings-style1 .course-card p {
+            font-size: 1.0em;
+            color: #666;
+            margin-bottom: 20px;
+            line-height: 1.6;
+        }
+
+        .trainings-style1 .course-card .duration {
+            display: inline-block;
+            background-color: #ffc107;
+            color: #333;
+            padding: 8px 15px;
+            border-radius: 5px;
+            font-size: 0.9em;
+            font-weight: bold;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        /* Trainings Style 2: Overview List */
+        .trainings-style2 {
+            padding: 40px;
+            background-color: #fcfcfc;
+        }
+
+        .trainings-style2 h3 {
+            text-align: center;
+            font-size: 2.8em;
+            color: #6f42c1;
+            margin-bottom: 40px;
+            font-weight: 700;
+        }
+
+        .trainings-style2 ul {
+            list-style: none;
+            padding: 0;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .trainings-style2 ul li {
+            background-color: #f5f0ff; /* Light purple background */
+            padding: 25px;
+            margin-bottom: 20px;
+            border-radius: 10px;
+            border-left: 6px solid #6f42c1;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            transition: transform 0.2s ease;
+        }
+
+        .trainings-style2 ul li:hover {
+            transform: translateX(5px);
+        }
+
+        .trainings-style2 ul li h4 {
+            margin-top: 0;
+            font-size: 1.6em;
+            color: #333;
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+
+        .trainings-style2 ul li p {
+            font-size: 1.0em;
+            color: #555;
+            line-height: 1.6;
+        }
+
+        /* Trainings Style 3: Image and Text Blocks */
+        .trainings-style3 {
+            padding: 40px;
+            background-color: #fcfcfc;
+        }
+
+        .trainings-style3 .training-block {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 40px;
+            margin-bottom: 50px;
+        }
+
+        .trainings-style3 .training-block:nth-child(even) {
+            flex-direction: row-reverse;
+        }
+
+        .trainings-style3 .training-block .training-image {
+            flex: 1;
+            min-width: 300px;
+        }
+
+        .trainings-style3 .training-block .training-image img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 12px;
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15);
+        }
+
+        .trainings-style3 .training-block .training-content {
+            flex: 2;
+            min-width: 300px;
+        }
+
+        .trainings-style3 .training-block h4 {
+            font-size: 2.2em;
+            color: #6f42c1;
+            margin-bottom: 15px;
+            font-weight: 700;
+        }
+
+        .trainings-style3 .training-block p {
+            font-size: 1.05em;
+            color: #555;
+            line-height: 1.7;
+        }
+
+        /* Trainings Style 4: Featured Course with Call to Action */
+        .trainings-style4 {
+            padding: 50px 20px;
+            background: linear-gradient(135deg, #1a2a6c 0%, #b21f1f 50%, #fdbb2d 100%);
+            color: #fff;
+            text-align: center;
+            border-radius: 12px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .trainings-style4::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.3);
+            z-index: 1;
+        }
+
+        .trainings-style4 > * {
+            position: relative;
+            z-index: 2;
+        }
+
+        .trainings-style4 h3 {
+            font-size: 3.2em;
+            margin-bottom: 25px;
+            font-weight: 900;
+            text-shadow: 2px 2px 5px rgba(0,0,0,0.4);
+        }
+
+        .trainings-style4 p {
+            font-size: 1.4em;
+            max-width: 800px;
+            margin: 0 auto 40px auto;
+            line-height: 1.5;
+            text-shadow: 1px 1px 3px rgba(0,0,0,0.3);
+        }
+
+        .trainings-style4 .btn {
+            background: #fff;
+            color: #1a2a6c;
+            padding: 15px 40px;
+            font-size: 1.2em;
+            font-weight: 700;
+            border: none;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+        }
+
+
+        /* --- Why Choose Us Section Styles --- */
+        /* This section can often overlap with "Why Us", but can be differentiated by content/emphasis */
+
+        /* Why Choose Us Style 1: Value Proposition */
+        .why-choose-us-style1 {
+            text-align: center;
+            padding: 50px 20px;
+            background: linear-gradient(135deg, #e6f7ff 0%, #d0efff 100%);
+            border-radius: 12px;
+        }
+
+        .why-choose-us-style1 h3 {
+            font-size: 3.2em;
+            color: #007bff;
+            margin-bottom: 25px;
+            font-weight: 800;
+        }
+
+        .why-choose-us-style1 p {
+            font-size: 1.2em;
+            max-width: 700px;
+            margin: 0 auto 30px auto;
+            color: #555;
+            line-height: 1.7;
+        }
+
+        .why-choose-us-style1 .stats {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap; /* Allow wrapping on small screens */
+            gap: 40px;
+            margin-top: 30px;
+            font-size: 1.4em;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .why-choose-us-style1 .stats span {
+            background-color: #fff;
+            padding: 15px 25px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+            border: 1px solid #e0e0e0;
+        }
+
+        .why-choose-us-style1 .stats span strong {
+            color: #28a745;
+            font-size: 1.2em;
+        }
+
+        /* Why Choose Us Style 2: Testimonial & Value */
+        .why-choose-us-style2 {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 40px;
+            padding: 40px;
+            align-items: center;
+            background-color: #fcfcfc;
+        }
+
+        .why-choose-us-style2 .testimonial {
+            flex: 1;
+            min-width: 320px;
+            background-color: #fff3cd;
+            border-left: 6px solid #ffc107;
+            padding: 30px;
+            border-radius: 12px;
+            font-style: italic;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+        }
+
+        .why-choose-us-style2 .testimonial p {
+            font-size: 1.15em;
+            margin-bottom: 15px;
+            line-height: 1.7;
+        }
+
+        .why-choose-us-style2 .testimonial .author {
+            font-weight: 600;
+            color: #555;
+            font-style: normal;
+            text-align: right;
+            margin-top: 15px;
+            font-size: 1.0em;
+        }
+
+        .why-choose-us-style2 .value-points {
+            flex: 1;
+            min-width: 320px;
+            padding: 20px;
+        }
+
+        .why-choose-us-style2 .value-points h4 {
+            font-size: 2.2em;
+            color: #007bff;
+            margin-bottom: 20px;
+            font-weight: 700;
+        }
+
+        .why-choose-us-style2 .value-points ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .why-choose-us-style2 .value-points ul li {
+            margin-bottom: 12px;
+            font-size: 1.1em;
+            position: relative;
+            padding-left: 30px;
+            color: #444;
+        }
+
+        .why-choose-us-style2 .value-points ul li::before {
+            content: '\f005'; /* Font Awesome star icon */
+            font-family: 'Font Awesome 5 Free';
+            font-weight: 900;
+            color: #ffc107;
+            position: absolute;
+            left: 0;
+            top: 0;
+            font-size: 1.1em;
+        }
+
+
+        /* --- Footer Section Styles --- */
+
+        /* Footer Style 1: Minimalist */
+        .footer-style1 {
+            text-align: center;
+            padding: 35px 20px;
+            background-color: #343a40;
+            color: #f8f9fa;
+            border-radius: 12px;
+            margin: 40px 20px; /* Added horizontal margin */
+        }
+
+        .footer-style1 p {
+            margin: 0 0 15px 0;
+            font-size: 0.95em;
+        }
+
+        .footer-style1 nav a {
+            color: #f8f9fa;
+            text-decoration: none;
+            margin: 0 18px;
+            transition: color 0.3s ease;
+            font-size: 1.0em;
+        }
+
+        .footer-style1 nav a:hover {
+            color: #007bff;
+        }
+
+        /* Footer Style 2: Multi-Column */
+        .footer-style2 {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-around;
+            gap: 40px;
+            padding: 50px 20px;
+            background-color: #212529;
+            color: #f8f9fa;
+            border-radius: 12px;
+            margin: 40px 20px; /* Added horizontal margin */
+        }
+
+        .footer-style2 .footer-col {
+            flex: 1;
+            min-width: 280px;
+            padding: 10px;
+        }
+
+        .footer-style2 .footer-col h4 {
+            color: #007bff;
+            font-size: 1.6em;
+            margin-bottom: 25px;
+            border-bottom: 2px solid #444;
+            padding-bottom: 12px;
+            font-weight: 600;
+        }
+
+        .footer-style2 .footer-col p {
+            font-size: 0.95em;
+            line-height: 1.8;
+            color: #ccc;
+        }
+
+        .footer-style2 .footer-col ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .footer-style2 .footer-col ul li {
+            margin-bottom: 12px;
+        }
+
+        .footer-style2 .footer-col ul li a {
+            color: #f8f9fa;
+            text-decoration: none;
+            transition: color 0.3s ease;
+            font-size: 1.0em;
+        }
+
+        .footer-style2 .footer-col ul li a:hover {
+            color: #28a745;
+        }
+
+        .footer-style2 .social-links a {
+            color: #f8f9fa;
+            font-size: 1.8em;
+            margin-right: 20px;
+            text-decoration: none;
+            transition: color 0.3s ease, transform 0.2s ease;
+        }
+
+        .footer-style2 .social-links a:hover {
+            color: #007bff;
+            transform: translateY(-3px);
+        }
+
+
+        /* Responsive Adjustments */
+        @media (max-width: 768px) {
+            body {
+                padding: 0; /* Remove body padding on small screens */
+            }
+
+            .section-container {
+                padding: 20px;
+                margin: 20px 15px; /* Adjust margin for smaller screens */
+            }
+
+            .section-container h2 {
+                font-size: 1.8em;
+                margin-bottom: 20px;
+            }
+
+            /* Main Navbar Responsive */
+            #main-navbar {
+                flex-direction: column;
+                padding: 15px 20px;
+                border-radius: 0; /* Remove border-radius on small screens */
+            }
+            #main-navbar .logo {
+                margin-bottom: 15px;
+            }
+            #main-navbar .nav-links {
+                flex-direction: column;
+                gap: 10px;
+                width: 100%;
+                text-align: center;
+            }
+            #main-navbar .nav-links a {
+                padding: 8px 10px;
+                width: calc(100% - 20px); /* Adjust for padding */
+                display: block;
+            }
+
+            /* Top Toggle Buttons Responsive */
+            .toggle-btn-container {
+                margin: 20px 15px;
+                gap: 10px;
+            }
+            .toggle-btn {
+                width: calc(50% - 10px); /* Two columns on mobile */
+                font-size: 0.9em;
+            }
+
+            /* Hero Sections */
+            .hero-style1 h1, .hero-style3 h1 {
+                font-size: 2.8em;
+            }
+            .hero-style2 h1 {
+                font-size: 3.2em;
+            }
+            .hero-style1 p, .hero-style2 p, .hero-style3 p {
+                font-size: 1.1em;
+            }
+            .hero-style1, .hero-style2, .hero-style3 {
+                padding: 60px 15px;
+            }
+            .hero-style2 .hero-overlay {
+                padding: 30px;
+            }
+
+            /* About Us Sections */
+            .about-style1 h3, .about-style3 h3 {
+                font-size: 2.2em;
+            }
+            .about-style2 {
+                flex-direction: column;
+                gap: 30px;
+                padding: 30px;
+            }
+            .about-style2 .about-image, .about-style2 .about-content {
+                min-width: unset;
+                width: 100%;
+            }
+            .about-style3 .icon-grid {
+                grid-template-columns: 1fr;
+            }
+
+            /* Services Sections */
+            .services-style1, .services-style2, .services-style3, .services-style4 {
+                padding: 30px;
+            }
+            .services-style1 .service-card h4, .services-style2 .service-item h4 {
+                font-size: 1.5em;
+            }
+            .services-style2 .service-item {
+                flex-direction: column;
+                align-items: center;
+                text-align: center;
+            }
+            .services-style2 .service-item .icon {
+                margin-bottom: 10px;
+            }
+            .services-style3 .service-block {
+                flex-direction: column !important; /* Override row-reverse */
+                gap: 30px;
+            }
+            .services-style3 .service-block .service-image, .services-style3 .service-block .service-content {
+                min-width: unset;
+                width: 100%;
+            }
+            .services-style4 .accordion-header {
+                font-size: 1.1em;
+                padding: 15px;
+            }
+
+            /* Why Us Sections */
+            .why-us-style1 h3, .why-us-style3 h3, .why-us-style4 h3 {
+                font-size: 2.2em;
+            }
+            .why-us-style2 {
+                grid-template-columns: 1fr;
+            }
+            .why-us-style2 .feature-block {
+                padding: 25px;
+            }
+            .why-us-style3 .numbered-item {
+                flex-direction: column;
+                align-items: center;
+                text-align: center;
+                gap: 10px;
+            }
+            .why-us-style3 .numbered-item .number {
+                margin-bottom: 10px;
+            }
+            .why-us-style4 .testimonial-card {
+                padding: 25px;
+            }
+            .why-us-style4 .testimonial-card p {
+                font-size: 1.05em;
+            }
+
+            /* Trainings Sections */
+            .trainings-style1, .trainings-style2, .trainings-style3, .trainings-style4 {
+                padding: 30px;
+            }
+            .trainings-style1 .course-card h4, .trainings-style2 ul li h4 {
+                font-size: 1.5em;
+            }
+            .trainings-style3 .training-block {
+                flex-direction: column !important; /* Override row-reverse */
+                gap: 30px;
+            }
+            .trainings-style3 .training-block .training-image, .trainings-style3 .training-block .training-content {
+                min-width: unset;
+                width: 100%;
+            }
+            .trainings-style4 h3 {
+                font-size: 2.5em;
+            }
+            .trainings-style4 p {
+                font-size: 1.2em;
+            }
+
+            /* Why Choose Us Sections */
+            .why-choose-us-style1 h3 {
+                font-size: 2.5em;
+            }
+            .why-choose-us-style1 .stats {
+                flex-direction: column;
+                gap: 20px;
+            }
+            .why-choose-us-style2 {
+                flex-direction: column;
+                gap: 30px;
+            }
+            .why-choose-us-style2 .testimonial, .why-choose-us-style2 .value-points {
+                min-width: unset;
+                width: 100%;
+            }
+
+            /* Footer Sections */
+            .footer-style1 nav a {
+                display: block;
+                margin: 10px 0;
+            }
+            .footer-style2 {
+                flex-direction: column;
+                gap: 30px;
+                padding: 30px;
+            }
+            .footer-style2 .footer-col {
+                min-width: unset;
+                width: 100%;
+                text-align: center;
+            }
+            .footer-style2 .footer-col ul {
+                text-align: center;
+            }
+            .footer-style2 .footer-col ul li {
+                display: inline-block; /* For horizontal links in footer on mobile */
+                margin: 0 10px;
+            }
+            .footer-style2 .social-links {
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Main Navigation Bar -->
+    <nav id="main-navbar">
+        <a href="#" class="logo">YourBrand</a>
+        <ul class="nav-links">
+            <li><a href="#">Home</a></li>
+            <li><a href="#">About</a></li>
+            <li><a href="#">Services</a></li>
+            <li><a href="#">Trainings</a></li>
+            <li><a href="#">Contact</a></li>
+        </ul>
+    </nav>
+
+    <div class="toggle-btn-container">
+        <h1 style="color: #007bff; font-size: 2.5em; margin-bottom: 20px; width: 100%;">Website Section Styles Showcase</h1>
+        <p style="font-size: 1.1em; color: #555; width: 100%;">Use the buttons below to toggle between different styles for each section.</p>
+
+        <button class="toggle-btn" data-section-type="hero">Hero Sections</button>
+        <button class="toggle-btn" data-section-type="about-us">About Us Sections</button>
+        <button class="toggle-btn" data-section-type="services">Services Sections</button>
+        <button class="toggle-btn" data-section-type="why-us">Why Us Sections</button>
+        <button class="toggle-btn" data-section-type="trainings">Trainings Sections</button>
+        <button class="toggle-btn" data-section-type="why-choose-us">Why Choose Us Sections</button>
+        <button class="toggle-btn" data-section-type="footer">Footer Sections</button>
+    </div>
+
+
+    <!-- Hero Section Styles -->
+    <div id="hero-sections" class="section-group">
+        <div id="hero-section-style1" class="section-container active">
+            <h2>Hero Section - Style 1: Minimalist</h2>
+            <div class="hero-style1">
+                <div class="hero-content">
+                    <h1>Innovate. Create. Inspire.</h1>
+                    <p>We craft exceptional digital experiences that drive growth and connect with your audience.</p>
+                    <a href="#" class="btn">Discover More</a>
+                </div>
+            </div>
+        </div>
+
+        <div id="hero-section-style2" class="section-container hidden">
+            <h2>Hero Section - Style 2: Image Background</h2>
+            <div class="hero-style2">
+                <div class="hero-overlay">
+                    <h1>Welcome to Our Vision</h1>
+                    <p>Transforming ideas into reality with cutting-edge solutions and a passion for excellence.</p>
+                    <a href="#" class="btn btn-alt">Get Started Today</a>
+                </div>
+            </div>
+        </div>
+
+        <div id="hero-section-style3" class="section-container hidden">
+            <h2>Hero Section - Style 3: Gradient Background</h2>
+            <div class="hero-style3">
+                <h1>Your Future, Our Expertise</h1>
+                <p>Empowering businesses with strategic insights and innovative technology to achieve unparalleled success.</p>
+                <a href="#" class="btn">Explore Our Services</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- About Us Section Styles -->
+    <div id="about-us-sections" class="section-group hidden">
+        <div id="about-us-section-style1" class="section-container active">
+            <h2>About Us - Style 1: Simple Text Block</h2>
+            <div class="about-style1">
+                <h3>Who We Are</h3>
+                <p>We are a dynamic team of professionals dedicated to delivering outstanding results. Our mission is to empower businesses through innovative technology and creative solutions. With years of collective experience, we pride ourselves on understanding our clients' unique needs and crafting tailored strategies that lead to measurable success and long-term partnerships.</p>
+            </div>
+        </div>
+
+        <div id="about-us-section-style2" class="section-container hidden">
+            <h2>About Us - Style 2: Image & Text Split</h2>
+            <div class="about-style2">
+                <div class="about-image">
+                    <img src="https://placehold.co/600x400/007bff/ffffff?text=Our+Team" alt="About Us">
+                </div>
+                <div class="about-content">
+                    <h3>Our Story & Vision</h3>
+                    <p>Founded in 2010, our journey began with a simple yet profound goal: to bridge the gap between complex technological challenges and user-friendly, effective solutions. We believe in fostering strong, collaborative partnerships and providing services that not only meet but consistently exceed expectations.</p>
+                    <ul>
+                        <li>Innovation at our core</li>
+                        <li>Client-centric approach</li>
+                        <li>Sustainable growth strategies</li>
+                        <li>Expert team & proven methodologies</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div id="about-us-section-style3" class="section-container hidden">
+            <h2>About Us - Style 3: Icon Box Grid</h2>
+            <div class="about-style3">
+                <h3>Our Core Values</h3>
+                <div class="icon-grid">
+                    <div class="icon-box">
+                        <i class="icon fas fa-lightbulb"></i>
+                        <h4>Innovation</h4>
+                        <p>Constantly seeking new and better ways to solve problems and create value.</p>
+                    </div>
+                    <div class="icon-box">
+                        <i class="icon fas fa-handshake"></i>
+                        <h4>Integrity</h4>
+                        <p>Operating with honesty and transparency in all our dealings.</p>
+                    </div>
+                    <div class="icon-box">
+                        <i class="icon fas fa-users"></i>
+                        <h4>Collaboration</h4>
+                        <p>Working together with clients and within our team for shared success.</p>
+                    </div>
+                    <div class="icon-box">
+                        <i class="icon fas fa-chart-line"></i>
+                        <h4>Excellence</h4>
+                        <p>Committed to delivering high-quality results and continuous improvement.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Services Section Styles -->
+    <div id="services-sections" class="section-group hidden">
+        <div id="services-section-style1" class="section-container active">
+            <h2>Services - Style 1: Grid Cards</h2>
+            <div class="services-style1">
+                <div class="service-card">
+                    <h4>Web Development</h4>
+                    <p>Building responsive, secure, and powerful websites tailored to your business needs, from simple landing pages to complex web applications.</p>
+                </div>
+                <div class="service-card">
+                    <h4>Digital Marketing</h4>
+                    <p>Boost your online presence and reach your target audience with our data-driven strategies including SEO, SEM, and social media marketing.</p>
+                </div>
+                <div class="service-card">
+                    <h4>UI/UX Design</h4>
+                    <p>Crafting intuitive, engaging, and aesthetically pleasing user interfaces and experiences that delight your customers.</p>
+                </div>
+                <div class="service-card">
+                    <h4>Cloud Solutions</h4>
+                    <p>Leveraging cloud technologies for scalable, secure, and efficient infrastructure, including migration and management services.</p>
+                </div>
+            </div>
+        </div>
+
+        <div id="services-section-style2" class="section-container hidden">
+            <h2>Services - Style 2: List with Icons</h2>
+            <div class="services-style2">
+                <div class="service-item">
+                    <i class="icon fas fa-code"></i>
+                    <div>
+                        <h4>Custom Software Development</h4>
+                        <p>Develop bespoke software solutions designed to streamline your operations, improve efficiency, and meet unique business challenges.</p>
+                    </div>
+                </div>
+                <div class="service-item">
+                    <i class="icon fas fa-mobile-alt"></i>
+                    <div>
+                        <h4>Mobile App Development</h4>
+                        <p>Create native or hybrid mobile applications for iOS and Android platforms, ensuring seamless performance and user engagement.</p>
+                    </div>
+                </div>
+                <div class="service-item">
+                    <i class="icon fas fa-cloud"></i>
+                    <div>
+                        <h4>Cloud Computing & DevOps</h4>
+                        <p>Implement robust cloud infrastructure and DevOps practices for continuous integration, delivery, and scalability.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="services-section-style3" class="section-container hidden">
+            <h2>Services - Style 3: Image Left/Right with Text</h2>
+            <div class="services-style3">
+                <div class="service-block">
+                    <div class="service-image">
+                        <img src="https://placehold.co/600x400/28a745/ffffff?text=Web+Development" alt="Web Development">
+                    </div>
+                    <div class="service-content">
+                        <h4>Responsive Web Development</h4>
+                        <p>We build modern, responsive websites that look great and perform flawlessly on any device. Our focus is on user experience, SEO, and robust backend functionality to ensure your online presence is powerful and effective.</p>
+                    </div>
+                </div>
+                <div class="service-block">
+                    <div class="service-image">
+                        <img src="https://placehold.co/600x400/ffc107/333333?text=Digital+Marketing" alt="Digital Marketing">
+                    </div>
+                    <div class="service-content">
+                        <h4>Strategic Digital Marketing</h4>
+                        <p>Our digital marketing experts craft tailored strategies to enhance your brand visibility, drive traffic, and convert leads. From content creation to paid advertising, we cover all aspects to maximize your ROI.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="services-section-style4" class="section-container hidden">
+            <h2>Services - Style 4: Accordion/Expandable List</h2>
+            <div class="services-style4">
+                <div class="accordion-item">
+                    <div class="accordion-header">
+                        <span>Web Design & Development</span>
+                        <i class="icon fas fa-chevron-down"></i>
+                    </div>
+                    <div class="accordion-content">
+                        <p>From custom website design to full-stack development, we create engaging and functional web solutions. We specialize in modern frameworks and ensure cross-browser compatibility and mobile responsiveness.</p>
+                    </div>
+                </div>
+                <div class="accordion-item">
+                    <div class="accordion-header">
+                        <span>SEO & Content Strategy</span>
+                        <i class="icon fas fa-chevron-down"></i>
+                    </div>
+                    <div class="accordion-content">
+                        <p>Improve your search engine rankings and attract organic traffic with our comprehensive SEO services and compelling content strategies. We analyze keywords, optimize on-page elements, and build high-quality backlinks.</p>
+                    </div>
+                </div>
+                <div class="accordion-item">
+                    <div class="accordion-header">
+                        <span>E-commerce Solutions</span>
+                        <i class="icon fas fa-chevron-down"></i>
+                    </div>
+                    <div class="accordion-content">
+                        <p>Build powerful and secure online stores that drive sales. We offer end-to-end e-commerce development, including platform selection, payment gateway integration, and inventory management systems.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Why Us Section Styles -->
+    <div id="why-us-sections" class="section-group hidden">
+        <div id="why-us-section-style1" class="section-container active">
+            <h2>Why Us - Style 1: Bullet Points</h2>
+            <div class="why-us-style1">
+                <h3>Why Choose Our Team?</h3>
+                <ul>
+                    <li><strong>Expert Team:</strong> Our professionals are highly skilled, certified, and experienced in their respective fields, bringing a wealth of knowledge to every project.</li>
+                    <li><strong>Client Focus:</strong> Your success is our top priority. We listen, understand, and tailor our solutions to meet your specific goals and challenges.</li>
+                    <li><strong>Innovative Solutions:</strong> We stay ahead of industry trends, leveraging the latest technologies and creative approaches to deliver cutting-edge solutions.</li>
+                    <li><strong>Proven Track Record:</strong> We have a history of successfully delivering complex projects on time and within budget, consistently exceeding client expectations.</li>
+                    <li><strong>Transparent Communication:</strong> We believe in clear, honest, and frequent communication throughout every stage of our partnership.</li>
+                </ul>
+            </div>
+        </div>
+
+        <div id="why-us-section-style2" class="section-container hidden">
+            <h2>Why Us - Style 2: Feature Blocks</h2>
+            <div class="why-us-style2">
+                <div class="feature-block">
+                    <i class="icon fas fa-handshake"></i>
+                    <h4>Collaborative Approach</h4>
+                    <p>We work closely with you as an extension of your team, ensuring seamless integration and shared vision from concept to completion.</p>
+                </div>
+                <div class="feature-block">
+                    <i class="icon fas fa-lightbulb"></i>
+                    <h4>Creative Problem Solvers</h4>
+                    <p>Our team thrives on challenges, finding unique and effective solutions to complex problems that others might shy away from.</p>
+                </div>
+                <div class="feature-block">
+                    <i class="icon fas fa-shield-alt"></i>
+                    <h4>Reliability & Security</h4>
+                    <p>We build robust, secure, and scalable solutions that you can trust, ensuring your data and operations are always protected.</p>
+                </div>
+            </div>
+        </div>
+
+        <div id="why-us-section-style3" class="section-container hidden">
+            <h2>Why Us - Style 3: Numbered Points</h2>
+            <div class="why-us-style3">
+                <h3>Our Advantages</h3>
+                <div class="numbered-list">
+                    <div class="numbered-item">
+                        <span class="number">01</span>
+                        <div>
+                            <h4>Tailored Strategies</h4>
+                            <p>We don't believe in one-size-fits-all. Every solution is custom-designed to align perfectly with your business objectives.</p>
+                        </div>
+                    </div>
+                    <div class="numbered-item">
+                        <span class="number">02</span>
+                        <div>
+                            <h4>Dedicated Support</h4>
+                            <p>Our commitment extends beyond delivery. We provide ongoing support and maintenance to ensure long-term success.</p>
+                        </div>
+                    </div>
+                    <div class="numbered-item">
+                        <span class="number">03</span>
+                        <div>
+                            <h4>Measurable Results</h4>
+                            <p>We focus on delivering tangible outcomes, with clear metrics to track progress and demonstrate ROI.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="why-us-section-style4" class="section-container hidden">
+            <h2>Why Us - Style 4: Testimonial Highlight</h2>
+            <div class="why-us-style4">
+                <h3>What Our Clients Say</h3>
+                <div class="testimonial-card">
+                    <p>"Working with this team was a game-changer for our business. Their expertise, dedication, and innovative approach helped us achieve our goals faster than we ever imagined. Highly recommended for anyone looking for real results!"</p>
+                    <p class="author">- Sarah Chen, Marketing Director at Innovate Solutions</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Trainings Section Styles -->
+    <div id="trainings-sections" class="section-group hidden">
+        <div id="trainings-section-style1" class="section-container active">
+            <h2>Trainings - Style 1: Course Cards</h2>
+            <div class="trainings-style1">
+                <div class="course-card">
+                    <h4>Web Development Fundamentals</h4>
+                    <p>Learn the core technologies of the web: HTML, CSS, and JavaScript. Perfect for beginners looking to start their coding journey.</p>
+                    <span class="duration">8 Weeks | Online</span>
+                </div>
+                <div class="course-card">
+                    <h4>Advanced React Development</h4>
+                    <p>Master modern React concepts, state management, and performance optimization for building scalable single-page applications.</p>
+                    <span class="duration">6 Weeks | In-Person</span>
+                </div>
+                <div class="course-card">
+                    <h4>Digital Marketing Mastery</h4>
+                    <p>A comprehensive course covering SEO, SEM, social media marketing, email marketing, and analytics to boost your online presence.</p>
+                    <span class="duration">10 Weeks | Blended</span>
+                </div>
+            </div>
+        </div>
+
+        <div id="trainings-section-style2" class="section-container hidden">
+            <h2>Trainings - Style 2: Overview List</h2>
+            <div class="trainings-style2">
+                <h3>Our Training Programs</h3>
+                <ul>
+                    <li>
+                        <h4>Full-Stack Web Development Bootcamp</h4>
+                        <p>An intensive program covering front-end and back-end development, equipping you with skills for dynamic web applications.</p>
+                    </li>
+                    <li>
+                        <h4>Cybersecurity Essentials Certification</h4>
+                        <p>Understand fundamental cybersecurity principles, common threats, and best practices for protecting digital assets.</p>
+                    </li>
+                    <li>
+                        <h4>Data Science & Machine Learning</h4>
+                        <p>Explore data analysis, visualization, and machine learning algorithms to extract insights and build intelligent systems.</p>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <div id="trainings-section-style3" class="section-container hidden">
+            <h2>Trainings - Style 3: Image and Text Blocks</h2>
+            <div class="trainings-style3">
+                <div class="training-block">
+                    <div class="training-image">
+                        <img src="https://placehold.co/600x400/6f42c1/ffffff?text=Coding+Workshop" alt="Coding Workshop">
+                    </div>
+                    <div class="training-content">
+                        <h4>Hands-On Coding Workshops</h4>
+                        <p>Our workshops provide practical, hands-on experience in various programming languages and frameworks. Learn by doing with expert instructors guiding you every step of the way.</p>
+                    </div>
+                </div>
+                <div class="training-block">
+                    <div class="training-image">
+                        <img src="https://placehold.co/600x400/dc3545/ffffff?text=Leadership+Training" alt="Leadership Training">
+                    </div>
+                    <div class="training-content">
+                        <h4>Leadership & Management Training</h4>
+                        <p>Develop essential leadership and management skills through our specialized programs designed to foster effective team building, strategic thinking, and decision-making.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="trainings-section-style4" class="section-container hidden">
+            <h2>Trainings - Style 4: Featured Course with Call to Action</h2>
+            <div class="trainings-style4">
+                <h3>Unlock Your Potential with Our Featured Course!</h3>
+                <p>Dive deep into the world of Artificial Intelligence and Machine Learning. This comprehensive course is designed to equip you with the skills needed to thrive in the future of technology.</p>
+                <a href="#" class="btn">Enroll Now</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Why Choose Us Section Styles -->
+    <div id="why-choose-us-sections" class="section-group hidden">
+        <div id="why-choose-us-section-style1" class="section-container active">
+            <h2>Why Choose Us - Style 1: Value Proposition</h2>
+            <div class="why-choose-us-style1">
+                <h3>Unmatched Value, Tangible Results</h3>
+                <p>We combine cutting-edge technology with a human-centered approach to deliver solutions that drive real business growth. Our unwavering commitment to excellence ensures your investment yields significant, measurable returns and long-term success.</p>
+                <div class="stats">
+                    <span><strong>99%</strong> Client Satisfaction</span>
+                    <span><strong>500+</strong> Projects Completed</span>
+                    <span><strong>10+</strong> Years of Experience</span>
+                </div>
+            </div>
+        </div>
+
+        <div id="why-choose-us-section-style2" class="section-container hidden">
+            <h2>Why Choose Us - Style 2: Testimonial & Value</h2>
+            <div class="why-choose-us-style2">
+                <div class="testimonial">
+                    <p>"The team delivered beyond our expectations. Their proactive communication and exceptional technical skills made our complex project a resounding success. Highly recommend their services!"</p>
+                    <p class="author">- John Smith, CEO of Global Innovations</p>
+                </div>
+                <div class="value-points">
+                    <h4>Our Differentiators:</h4>
+                    <ul>
+                        <li>Tailored Solutions for Unique Needs</li>
+                        <li>Dedicated Support & Partnership</li>
+                        <li>Competitive Pricing & ROI Focus</li>
+                        <li>Agile & Flexible Development Process</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer Section Styles -->
+    <div id="footer-sections" class="section-group hidden">
+        <div id="footer-section-style1" class="section-container active">
+            <h2>Footer - Style 1: Minimalist</h2>
+            <footer class="footer-style1">
+                <p>&copy; 2025 Your Company Name. All rights reserved.</p>
+                <nav>
+                    <a href="#">Privacy Policy</a>
+                    <a href="#">Terms of Service</a>
+                    <a href="#">Sitemap</a>
+                </nav>
+            </footer>
+        </div>
+
+        <div id="footer-section-style2" class="section-container hidden">
+            <h2>Footer - Style 2: Multi-Column</h2>
+            <footer class="footer-style2">
+                <div class="footer-col">
+                    <h4>About Us</h4>
+                    <p>We are a leading provider of innovative digital solutions, committed to helping businesses thrive in the modern technological landscape. Our expertise spans web development, digital marketing, and IT consulting.</p>
+                </div>
+                <div class="footer-col">
+                    <h4>Quick Links</h4>
+                    <ul>
+                        <li><a href="#">Services</a></li>
+                        <li><a href="#">Portfolio</a></li>
+                        <li><a href="#">About</a></li>
+                        <li><a href="#">Contact</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h4>Connect With Us</h4>
+                    <div class="social-links">
+                        <a href="#" class="fab fa-facebook-f"></a>
+                        <a href="#" class="fab fa-twitter"></a>
+                        <a href="#" class="fab fa-linkedin-in"></a>
+                        <a href="#" class="fab fa-instagram"></a>
+                    </div>
+                </div>
+                <div class="footer-col">
+                    <h4>Contact Info</h4>
+                    <p><i class="fas fa-map-marker-alt"></i> 123 Business Rd, City, Country</p>
+                    <p><i class="fas fa-phone"></i> +1 234 567 8900</p>
+                    <p><i class="fas fa-envelope"></i> info@yourcompany.com</p>
+                </div>
+            </footer>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const sectionGroups = document.querySelectorAll('.section-group');
+            const toggleButtons = document.querySelectorAll('.toggle-btn');
+
+            // Function to hide all section groups
+            function hideAllSectionGroups() {
+                sectionGroups.forEach(group => {
+                    group.classList.add('hidden');
+                    // Also hide all individual sections within the group
+                    group.querySelectorAll('.section-container').forEach(section => {
+                        section.classList.add('hidden');
+                        section.classList.remove('active'); // Remove active class
+                    });
+                });
+            }
+
+            // Function to show a specific section group and its first style
+            function showSectionGroup(sectionType) {
+                hideAllSectionGroups(); // Hide all first
+
+                const targetGroup = document.getElementById(`${sectionType}-sections`);
+                if (targetGroup) {
+                    targetGroup.classList.remove('hidden');
+                    // Show the first section within this group
+                    const firstSection = targetGroup.querySelector('.section-container');
+                    if (firstSection) {
+                        firstSection.classList.remove('hidden');
+                        firstSection.classList.add('active'); // Mark as active
+                    }
+                }
+            }
+
+            // Event listeners for toggle buttons
+            toggleButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    const sectionType = button.dataset.sectionType;
+                    showSectionGroup(sectionType);
+                });
+            });
+
+            // Initially show the first section group (Hero sections)
+            showSectionGroup('hero');
+
+
+            // Logic for next/previous buttons within each section group
+            sectionGroups.forEach(group => {
+                const sectionContainers = group.querySelectorAll('.section-container');
+                if (sectionContainers.length > 1) {
+                    const navContainer = document.createElement('div');
+                    navContainer.classList.add('nav-style-btn-container'); // Use new class
+
+                    const prevBtn = document.createElement('button');
+                    prevBtn.textContent = 'Previous Style';
+                    prevBtn.classList.add('nav-style-btn', 'prev'); // Use new classes
+
+                    const nextBtn = document.createElement('button');
+                    nextBtn.textContent = 'Next Style';
+                    nextBtn.classList.add('nav-style-btn', 'next'); // Use new classes
+
+                    navContainer.appendChild(prevBtn);
+                    navContainer.appendChild(nextBtn);
+                    group.appendChild(navContainer);
+
+                    let currentStyleIndex = 0;
+
+                    const updateVisibility = () => {
+                        sectionContainers.forEach((section, index) => {
+                            if (index === currentStyleIndex) {
+                                section.classList.remove('hidden');
+                                section.classList.add('active');
+                            } else {
+                                section.classList.add('hidden');
+                                section.classList.remove('active');
+                            }
+                        });
+                    };
+
+                    prevBtn.addEventListener('click', () => {
+                        currentStyleIndex = (currentStyleIndex - 1 + sectionContainers.length) % sectionContainers.length;
+                        updateVisibility();
+                    });
+
+                    nextBtn.addEventListener('click', () => {
+                        currentStyleIndex = (currentStyleIndex + 1) % sectionContainers.length;
+                        updateVisibility();
+                    });
+
+                    // Initial update for each group
+                    updateVisibility();
+                }
+            });
+
+            // Accordion functionality for Services Style 4
+            const accordionHeaders = document.querySelectorAll('.services-style4 .accordion-header');
+            accordionHeaders.forEach(header => {
+                header.addEventListener('click', () => {
+                    const item = header.closest('.accordion-item');
+                    item.classList.toggle('active');
+                });
+            });
+        });
+    </script>
+</body>
+</html>
